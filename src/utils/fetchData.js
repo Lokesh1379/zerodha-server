@@ -10,7 +10,7 @@ export async function getHistoricalData(
     const to = new Date();
     const from = new Date();
     from.setDate(to.getDate() - days);
-    console.log(kc);
+    console.log(symbol, interval, from.toISOString(), to.toISOString());
     const candles = await kc.getHistoricalData(
       symbol,
       interval,
@@ -28,7 +28,7 @@ export async function getHistoricalData(
       volume: c.volume,
     }));
   } catch (err) {
-    console.error("Error fetching historical data:", err.message);
+    console.log("Error fetching historical data:");
     return [];
   }
 }

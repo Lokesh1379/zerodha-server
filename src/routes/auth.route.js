@@ -1,30 +1,3 @@
-// import { Router } from "express";
-// import { KiteConnect } from "kiteconnect";
-
-// const authRouter = Router();
-// let kite = null;
-// authRouter.post("/init", (req, res) => {
-//   const { apiKey, apiSecret } = req.body;
-
-//   if (!apiKey || !apiSecret) {
-//     return res.status(400).json({ error: "API Key and Secret required" });
-//   }
-
-//   // Save to process.env (in memory for now)
-//   process.env.KITE_API_KEY = apiKey;
-//   process.env.KITE_API_SECRET = apiSecret;
-
-//   // Init Kite client
-//   kite = new KiteConnect({ api_key: apiKey });
-
-//   // Build login URL
-//   const loginUrl = kite.getLoginURL();
-//   console.log(loginUrl);
-//   res.json({ loginUrl });
-// });
-// export default authRouter;
-
-// src/routes/auth.js
 import express from "express";
 import { KiteConnect } from "kiteconnect";
 
@@ -56,14 +29,15 @@ callbackRouter.post("/callback", async (req, res) => {
         .json({ error: "Kite client not initialized. Call /auth/init first." });
     }
 
-    const { requestToken } = req.body;
-    if (!requestToken) {
+    const { request_token } = req.body;
+    if (!request_token) {
       return res.status(400).json({ error: "requestToken is required" });
     }
 
-    const session = await kc.generateSession(requestToken, apiSecret);
+    const session = await kc.generateSession(request_token, apiSecret);
     kc.setAccessToken(session.access_token);
 
+    console.log("Kite session established");
     // ✅ Store access_token somewhere safe (DB, Redis, file, etc.)
     return res.json({
       message: "Authentication successful",
